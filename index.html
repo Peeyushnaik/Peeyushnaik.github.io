@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peeyush Naik — Fitness Creator</title>
+<meta name="description" content="Peeyush Naik (@peeyush.chronicles) — lifting, running and calisthenics, documented honestly. Media kit and brand collaborations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ THEME ============ */
+  :root {
+    --bg: #0d0f0c;
+    --bg-2: #141712;
+    --line: #262b23;
+    --text: #e8ebe3;
+    --muted: #9aa294;
+    --accent: #c6f432;      /* energy lime */
+    --accent-ink: #0d0f0c;
+    --warm: #ff8a3d;
+    --radius: 14px;
+    --serif: "Fraunces", Georgia, serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --sans: "Inter", system-ui, sans-serif;
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f5ef;
+    --bg-2: #ecebe3;
+    --line: #d9d8cd;
+    --text: #171914;
+    --muted: #5f6558;
+    --accent: #5a8a00;
+    --accent-ink: #ffffff;
+    --warm: #d4600f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--sans); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background .3s, color .3s;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .mono { font-family: var(--mono); }
+
+  /* ============ NAV ============ */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--mono); font-size: 14px; }
+  .logo b { background: var(--accent); color: var(--accent-ink); border-radius: 7px; padding: 3px 7px; font-size: 12px; }
+  .links { display: flex; gap: 22px; align-items: center; }
+  .links a { text-decoration: none; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .links a:hover { color: var(--text); }
+  .links a span { color: var(--accent); margin-right: 4px; }
+  .theme-btn { background: none; border: 1px solid var(--line); color: var(--text); width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 15px; }
+  @media (max-width: 720px) { .links a { display: none; } }
+
+  /* ============ HERO ============ */
+  .hero { padding: 90px 0 70px; position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; }
+  .tag { font-family: var(--mono); font-size: 13px; color: var(--accent); margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 7vw, 76px); line-height: 1.02; letter-spacing: -1px; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lead { font-size: 18px; color: var(--muted); margin: 22px 0 30px; max-width: 540px; }
+  .lead strong { color: var(--text); font-weight: 500; }
+  .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { font-family: var(--mono); font-size: 13px; padding: 12px 20px; border-radius: 10px; text-decoration: none; border: 1px solid var(--line); transition: transform .15s, background .15s; display: inline-block; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .status { margin-top: 34px; font-family: var(--mono); font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+
+  .photo-card {
+    position: relative; aspect-ratio: 4/5; border-radius: 22px; overflow: hidden;
+    border: 1px solid var(--line);
+    background: linear-gradient(150deg, var(--bg-2), color-mix(in srgb, var(--accent) 18%, var(--bg-2)));
+    display: grid; place-items: center;
+  }
+  .photo-card img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 40%; position: absolute; inset: 0; }
+
+  /* photo strip */
+  .strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+  .shot { position: relative; margin: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); aspect-ratio: 3/4; background: var(--bg-2); }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+  .shot:hover img { transform: scale(1.04); }
+  .shot figcaption { position: absolute; left: 12px; bottom: 12px; font-family: var(--mono); font-size: 11px; color: #fff; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); padding: 5px 9px; border-radius: 8px; }
+  @media (max-width: 720px) {
+    .strip { grid-template-columns: 1fr 1fr; }
+    .strip .shot:nth-child(2) { grid-column: 1 / -1; aspect-ratio: 4/3; order: -1; }
+    .shot figcaption { font-size: 10px; left: 8px; bottom: 8px; right: 8px; width: fit-content; }
+  }
+  .photo-card .initials { font-family: var(--serif); font-size: 96px; color: var(--accent); opacity: .7; }
+  .photo-badge {
+    position: absolute; left: 14px; bottom: 14px; right: 14px;
+    background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+    font-family: var(--mono); font-size: 12px; display: flex; justify-content: space-between;
+  }
+  .photo-badge span:last-child { color: var(--accent); }
+  @media (max-width: 820px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .photo-card { max-width: 340px; width: 100%; aspect-ratio: 1/1; }
+    .hero { padding-top: 50px; }
+  }
+
+  /* ============ STATS STRIP ============ */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .stat { padding: 26px 22px; border-right: 1px solid var(--line); background: var(--bg-2); }
+  .stat:last-child { border-right: none; }
+  .stat .num { font-family: var(--serif); font-size: 40px; line-height: 1; }
+  .stat .lbl { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .stats-updated { font-size: 11px; color: var(--muted); margin-top: 10px; text-align: right; }
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .stat:nth-child(3) { grid-column: 1 / -1; }
+  }
+
+  /* ============ SECTIONS ============ */
+  section { padding: 90px 0 0; }
+  .sec-head { margin-bottom: 36px; }
+  .sec-head .no { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4.5vw, 44px); letter-spacing: -.5px; margin-top: 6px; line-height: 1.12; }
+  .sec-head p { color: var(--muted); margin-top: 8px; }
+
+  .card { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; transition: border-color .2s, transform .2s; }
+  .card:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); transform: translateY(-3px); }
+
+  /* pillars */
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .pillar .ico { font-size: 26px; margin-bottom: 14px; }
+  .pillar h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .pillar p { color: var(--muted); font-size: 14px; }
+  @media (max-width: 900px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .pillars { grid-template-columns: 1fr; } }
+
+  /* reels */
+  .reels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .reel .badge-top { position: absolute; top: 14px; left: 14px; z-index: 1; font-family: var(--mono); font-size: 11px; background: var(--accent); color: var(--accent-ink); padding: 3px 9px; border-radius: 99px; font-weight: 600; }
+  .reel {
+    aspect-ratio: 9/16; border-radius: var(--radius); border: 1px solid var(--line);
+    background: linear-gradient(170deg, var(--bg-2) 40%, color-mix(in srgb, var(--warm) 22%, var(--bg-2)));
+    position: relative; overflow: hidden; text-decoration: none;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 16px;
+    transition: transform .2s;
+  }
+  .reel:hover { transform: translateY(-4px); }
+  .reel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(0,0,0,.75)); }
+  .reel > * { position: relative; z-index: 1; }
+  .reel .play { position: absolute; top: 14px; right: 14px; z-index: 1; font-size: 14px; color: #fff; opacity: .9; }
+  .reel .rt { color: #fff; font-weight: 600; font-size: 15px; line-height: 1.3; }
+  .reel .rm { color: rgba(255,255,255,.75); font-family: var(--mono); font-size: 11px; margin-top: 6px; }
+  @media (max-width: 820px) { .reels { grid-template-columns: repeat(2, 1fr); } .reels .reel-main { grid-column: 1 / -1; aspect-ratio: 4/5; order: -1; } .reel { padding: 12px; } .reel .rt { font-size: 13px; } .reel .rm { font-size: 10px; } }
+
+  /* chronicle timeline */
+  .timeline { border-left: 1px solid var(--line); margin-left: 6px; }
+  .tl-item { position: relative; padding: 0 0 30px 28px; }
+  .tl-item::before { content: ""; position: absolute; left: -6px; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .tl-item .when { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .tl-item h3 { font-size: 18px; font-weight: 600; margin: 2px 0 4px; }
+  .tl-item p { color: var(--muted); font-size: 15px; max-width: 640px; }
+
+  /* collab packages */
+  .packages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .pkg h3 { font-family: var(--serif); font-weight: 400; font-size: 24px; }
+  .pkg .price { font-family: var(--mono); font-size: 13px; color: var(--accent); margin: 6px 0 16px; }
+  .pkg ul { list-style: none; }
+  .pkg li { font-size: 14px; color: var(--muted); padding: 6px 0; border-top: 1px dashed var(--line); }
+  .pkg li::before { content: "→ "; color: var(--accent); font-family: var(--mono); }
+  .pkg.featured { border-color: var(--accent); }
+  .pkg .pill { display: inline-block; font-family: var(--mono); font-size: 11px; background: var(--accent); color: var(--accent-ink); padding: 2px 8px; border-radius: 99px; margin-bottom: 12px; }
+  @media (max-width: 820px) { .packages { grid-template-columns: 1fr; } }
+
+  /* two ways to reach */
+  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
+  .route { display: block; text-decoration: none; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 24px; transition: border-color .2s, transform .2s; }
+  .route:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .route .k { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .route h3 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 6px 0 6px; }
+  .route p { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+  .route .go { font-family: var(--mono); font-size: 13px; }
+  @media (max-width: 720px) { .routes { grid-template-columns: 1fr; } }
+
+  .fit { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .chip { font-family: var(--mono); font-size: 12px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); }
+
+  /* audience */
+  .aud { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bar-row { margin: 12px 0; }
+  .bar-row .lbl { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .bar-row .lbl span:last-child { font-family: var(--mono); color: var(--muted); }
+  .bar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; width: 0; transition: width 1.2s ease; }
+  .note { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 14px; }
+  @media (max-width: 720px) { .aud { grid-template-columns: 1fr; } }
+
+  /* contact */
+  .contact { margin: 90px 0 0; padding: 56px; border-radius: 24px; border: 1px solid var(--line);
+    background: radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%), var(--bg-2); }
+  .contact h2 { font-size: clamp(34px, 5vw, 54px); }
+  .contact p { color: var(--muted); margin: 12px 0 28px; max-width: 520px; }
+  .contact-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 30px; }
+  .contact-links a { text-decoration: none; border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--bg); }
+  .contact-links a:hover { border-color: var(--accent); }
+  .contact-links .k { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .contact-links .v { font-weight: 500; margin-top: 2px; word-break: break-all; }
+  @media (max-width: 720px) { .contact { padding: 32px 22px; } .contact-links { grid-template-columns: 1fr; } }
+
+  footer { padding: 40px 0 50px; font-family: var(--mono); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  /* reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } * { animation: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     EDIT ME: everything marked "EDIT" is a placeholder for you to update.
+     ===================================================================== -->
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo"><b>PN</b> peeyush.chronicles</a>
+    <div class="links">
+      <a href="#content"><span>01</span>Content</a>
+      <a href="#chronicle"><span>02</span>Chronicle</a>
+      <a href="#collab"><span>03</span>Brands</a>
+      <a href="#contact"><span>04</span>Contact</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">☾</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tag">// lift · run · calisthenics · document it all</div>
+      <h1>Peeyush Naik.<br>I started <em>anyway.</em></h1>
+      <p class="lead">
+        Just a college student who lifts, runs, tries calisthenics and posts it all <strong>for fun</strong>.
+        No coaching, no programs to sell, just the honest (and sometimes funny) process,
+        to <strong>inspire you to start</strong> before you feel ready.
+      </p>
+      <div class="btns">
+        <a class="btn primary" href="#contact">Feature your brand</a>
+        <a class="btn topmate-link" href="https://topmate.io/" target="_blank" rel="noopener">Study advice on Topmate ↗</a>
+      </div>
+      <div class="status"><span class="dot"></span> Open to featuring brands in my reels</div>
+    </div>
+
+    <div class="photo-card reveal">
+      <span class="initials">PN</span>
+      <img src="assets/casual.jpg" alt="Peeyush Naik" style="object-position: 47% 40%" onerror="this.remove()">
+      <div class="photo-badge"><span>lift · run · cali</span><span>● creating daily</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- Numbers below are a fallback. When data/stats.json exists (updated daily by
+       .github/workflows/update-stats.yml), the page uses those numbers instead. -->
+  <div class="stats reveal">
+    <div class="stat"><div class="num" data-stat="followers" data-count="4161">0</div><div class="lbl">Instagram followers</div></div>
+    <div class="stat"><div class="num" data-stat="posts" data-count="220">0</div><div class="lbl">Posts &amp; reels</div></div>
+    <div class="stat"><div class="num" data-stat="avg_views" data-count="20" data-suffix="K+">0</div><div class="lbl">Average views per reel</div></div>
+  </div>
+  <div class="stats-updated mono" id="statsUpdated" hidden></div>
+
+  <!-- ============ PHOTO STRIP ============ -->
+  <div class="sec-head reveal" style="margin-top:70px; margin-bottom:20px">
+    <h2>A little about myself</h2>
+  </div>
+  <div class="strip">
+    <figure class="shot reveal"><img src="assets/run-10k.jpg" alt="Peeyush with his medal at the World Mental Health Day 10K run" style="object-position: 58% 65%" loading="lazy"><figcaption>runner</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/srm.jpg" alt="Peeyush at SRM Tech Park" style="object-position: 30% 55%" loading="lazy"><figcaption>student · SRM</figcaption></figure>
+    <figure class="shot reveal"><img src="assets/back-flex.jpg" alt="Peeyush doing a back flex in the mirror" style="object-position: 50% 20%" loading="lazy"><figcaption>gym</figcaption></figure>
+  </div>
+
+  <!-- ============ 01 CONTENT ============ -->
+  <section id="content">
+    <div class="sec-head reveal">
+      <div class="no">01 · What I create</div>
+      <h2>Content pillars</h2>
+      <p>Four themes my audience comes back for.</p>
+    </div>
+    <div class="pillars">
+      <div class="card pillar reveal"><div class="ico">🏋️</div><h3>Lifting</h3><p>I got obese and felt ugly, so I pulled an Uno reverse. Now I'm documenting the glow-up one rep at a time.</p></div>
+      <div class="card pillar reveal"><div class="ico">🏃</div><h3>Running</h3><p>Now I run to keep my cardio in check, from easy evening runs to my first 10K medal.</p></div>
+      <div class="card pillar reveal"><div class="ico">🤸</div><h3>Calisthenics</h3><p>I practise calisthenics to keep my body functional, not just good-looking: mobility, control and real-world strength.</p></div>
+      <div class="card pillar reveal"><div class="ico">📚</div><h3>Student + fitness life</h3><p>Fitting training around classes, exams and assignments, plus relatable memes about college and gym life.</p></div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:60px">
+      <h2 style="font-size:28px">Featured reels</h2>
+      <p>Tap any reel to watch it on Instagram.</p>
+    </div>
+    <div class="reels">
+      <a class="reel reveal" href="https://www.instagram.com/reel/DaVTEpPpJB9/" target="_blank" rel="noopener">
+        <img src="assets/gym-mirror.jpg" alt="" style="object-position: 40% 60%" loading="lazy">
+        <span class="play">▶</span><div class="rt">Growing 🫶</div><div class="rm">3.5K likes · Jul 2026</div>
+      </a>
+      <a class="reel reel-main reveal" href="https://www.instagram.com/reel/DZKk-G5pe9C/" target="_blank" rel="noopener">
+        <img src="assets/roorkee.jpg" alt="" style="object-position: 50% 30%" loading="lazy">
+        <span class="badge-top">top reel</span>
+        <span class="play">▶</span><div class="rt">Finally IIT, as a Research Intern</div><div class="rm">22K likes · 327 comments · Jun 2026</div>
+      </a>
+      <a class="reel reveal" href="https://www.instagram.com/reel/DS69Q6_ks26/" target="_blank" rel="noopener">
+        <img src="assets/profile.jpg" alt="" style="object-position: 55% 40%" loading="lazy">
+        <span class="play">▶</span><div class="rt">Decent transformation ig. Not done yet</div><div class="rm">Day 4/100 · Dec 2025</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ 02 CHRONICLE ============ -->
+  <section id="chronicle">
+    <div class="sec-head reveal">
+      <div class="no">02 · The chronicle</div>
+      <h2>The story so far</h2>
+      <p>No overnight glow-up, just steady progress.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal"><div class="when">DEC 2025 · CHAPTER 1</div><h3>I had stories to tell</h3><p>I felt I had stories worth telling, so I started documenting my life. The response was better than I expected.</p></div>
+      <div class="tl-item reveal"><div class="when">CHAPTER 2</div><h3>Cracked an IIT internship, then helped others do it too</h3><p>I realised I'm good at studies, and I landed a research internship at IIT Roorkee. Then I started helping people in college do the same. It worked, and I kept going.</p></div>
+      <div class="tl-item reveal"><div class="when">CHAPTER 3</div><h3>Started running</h3><p>I took up running, and with it came events, medals and a lot of new people.</p></div>
+      <div class="tl-item reveal"><div class="when">NOW · CHAPTER 4</div><h3>Fat to fit, with acads on track</h3><p>Now I try to inspire people to go from fat to fit while balancing academics at the same time.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 COLLAB ============ -->
+  <section id="collab">
+    <div class="sec-head reveal">
+      <div class="no">03 · Brand features</div>
+      <h2>Get your brand in my reels</h2>
+      <p>I'm not an agency or a coach. If your brand fits what I already do, I'll feature it in my content, my way.</p>
+    </div>
+    <div class="packages">
+      <div class="card pkg reveal">
+        <h3>Story shoutout</h3>
+        <div class="price">Rate on request</div>
+        <ul><li>Your brand tagged in my stories</li><li>Link sticker to your page or product</li><li>Shown the way I actually use it</li></ul>
+      </div>
+      <div class="card pkg featured reveal">
+        <span class="pill">most asked</span>
+        <h3>Featured in a reel</h3>
+        <div class="price">Rate on request</div>
+        <ul><li>Your product shows up in one of my reels</li><li>Fits naturally into my lifting, runs or daily life</li><li>Tag or collab post with your handle</li><li>My honest take, in my own voice</li></ul>
+      </div>
+    </div>
+    <div class="fit reveal">
+      <span class="chip">Good fit →</span>
+      <span class="chip">Activewear</span><span class="chip">Running shoes</span><span class="chip">Supplements &amp; nutrition</span>
+      <span class="chip">Fitness wearables</span><span class="chip">Gyms &amp; fitness apps</span><span class="chip">Healthy food</span><span class="chip">Hydration</span>
+      <span class="chip">Study apps</span><span class="chip">Ed-tech &amp; online courses</span>
+      <span class="chip">Productivity tools</span><span class="chip">Laptops &amp; study gear</span>
+    </div>
+
+    <!-- AUDIENCE SECTION (hidden): fill in real numbers from Instagram → Professional dashboard,
+         then delete this comment line and the "END AUDIENCE" line below to show it again.
+    <div class="aud" style="margin-top:40px">
+      <div class="card reveal">
+        <h3 style="font-size:17px;margin-bottom:6px">Audience: age</h3>
+        <div class="bar-row"><div class="lbl"><span>18–24</span><span>EDIT 45%</span></div><div class="bar"><i data-w="45"></i></div></div>
+        <div class="bar-row"><div class="lbl"><span>25–34</span><span>EDIT 38%</span></div><div class="bar"><i data-w="38"></i></div></div>
+        <div class="bar-row"><div class="lbl"><span>35+</span><span>EDIT 17%</span></div><div class="bar"><i data-w="17"></i></div></div>
+        <div class="note">* sample numbers, replace with your insights</div>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:17px;margin-bottom:6px">Audience: top locations</h3>
+        <div class="bar-row"><div class="lbl"><span>India</span><span>EDIT 85%</span></div><div class="bar"><i data-w="85"></i></div></div>
+        <div class="bar-row"><div class="lbl"><span>EDIT city</span><span>EDIT 20%</span></div><div class="bar"><i data-w="20"></i></div></div>
+        <div class="bar-row"><div class="lbl"><span>EDIT city</span><span>EDIT 12%</span></div><div class="bar"><i data-w="12"></i></div></div>
+        <div class="note">* sample numbers, replace with your insights</div>
+      </div>
+    </div>
+    END AUDIENCE -->
+  </section>
+
+  <!-- ============ 04 CONTACT ============ -->
+  <div class="contact reveal" id="contact">
+    <div class="no mono" style="font-size:13px;color:var(--accent)">04 · Say hello</div>
+    <h2>Two ways to reach me.</h2>
+    <p>Brands, email me. Students looking for study advice, find me on Topmate.</p>
+    <div class="routes">
+      <a class="route" href="mailto:peeyush.chronicles@gmail.com?subject=Brand%20feature%20with%20peeyush.chronicles">
+        <div class="k">for brands</div>
+        <h3>Feature your brand</h3>
+        <p>Tell me about your product and which feature you're interested in. I'll reply with my rate.</p>
+        <span class="go">Email me →</span>
+      </a>
+      <a class="route topmate-link" href="https://topmate.io/" target="_blank" rel="noopener">
+        <div class="k">for students</div>
+        <h3>Study advice on Topmate</h3>
+        <p>Preparing for exams, choosing a path, or wondering how to land a research internship? Ask me on Topmate.</p>
+        <span class="go">Open Topmate ↗</span>
+      </a>
+    </div>
+    <div class="contact-links">
+      <a href="https://www.instagram.com/peeyush.chronicles/" target="_blank" rel="noopener"><div class="k">instagram</div><div class="v">@peeyush.chronicles</div></a>
+      <a href="mailto:peeyush.chronicles@gmail.com"><div class="k">email</div><div class="v">peeyush.chronicles@gmail.com</div></a>
+      <a class="topmate-link" href="https://topmate.io/" target="_blank" rel="noopener"><div class="k">topmate · study advice</div><div class="v topmate-text">EDIT your Topmate link</div></a>
+    </div>
+  </div>
+
+  <footer>
+    <span>© <span id="yr"></span> Peeyush Naik · peeyush.chronicles</span>
+    <span>I started anyway. You can too.</span>
+  </footer>
+</div>
+
+<script>
+  // Your Topmate page: change it here once and every Topmate button uses it
+  const TOPMATE_URL = "https://topmate.io/peeyushnaik";
+  document.querySelectorAll('.topmate-link').forEach(a => a.href = TOPMATE_URL);
+  if (TOPMATE_URL.replace(/\/$/, '') !== 'https://topmate.io') document.querySelectorAll('.topmate-text').forEach(el => el.textContent = TOPMATE_URL.replace(/^https?:\/\//, ''));
+
+  // theme toggle (remembered per browser)
+  const root = document.documentElement, btn = document.getElementById('themeBtn');
+  try { if (localStorage.getItem('theme') === 'light') { root.dataset.theme = 'light'; btn.textContent = '☀'; } } catch (e) {}
+  btn.onclick = () => {
+    const light = root.dataset.theme !== 'light';
+    root.dataset.theme = light ? 'light' : 'dark';
+    btn.textContent = light ? '☀' : '☾';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  };
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // count-up numbers
+  function countUp(el) {
+    const target = +el.dataset.count, suffix = el.dataset.suffix || '', t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / 1400, 1), v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+      el.textContent = v.toLocaleString('en-IN') + (p === 1 ? suffix : '');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  // reveal on scroll + trigger animations
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    e.target.querySelectorAll('[data-count]').forEach(countUp);
+    e.target.querySelectorAll('.bar i').forEach(b => b.style.width = b.dataset.w + '%');
+    io.unobserve(e.target);
+  }), { threshold: 0.15 });
+  // live stats: use data/stats.json when available, otherwise keep the numbers in the HTML
+  function applyStats(s) {
+    const set = (key, count, suffix = '') => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && Number.isFinite(count) && count > 0) { el.dataset.count = count; el.dataset.suffix = suffix; }
+    };
+    set('followers', s.followers);
+    set('posts', s.posts);
+    if (s.avg_views >= 1000) set('avg_views', Math.floor(s.avg_views / 1000), 'K+');
+    else set('avg_views', Math.round(s.avg_views));
+    // if the stats already animated with the fallback numbers, re-run with the live ones
+    if (document.querySelector('.stats').classList.contains('in')) document.querySelectorAll('[data-stat]').forEach(countUp);
+    if (s.updated_at) {
+      const note = document.getElementById('statsUpdated');
+      note.textContent = 'Live from Instagram · updated ' + new Date(s.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      note.hidden = false;
+    }
+  }
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  fetch('data/stats.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : null)
+    .then(s => { if (s) applyStats(s); })
+    .catch(() => {});
+</script>
+</body>
+</html>

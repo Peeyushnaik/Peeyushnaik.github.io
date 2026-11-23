@@ -1,0 +1,57 @@
+name: Update Instagram stats
+
+on:
+  schedule:
+    - cron: "30 0 * * *"   # every day at 06:00 IST (00:30 UTC)
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch numbers from Instagram
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_TOKEN_OUT: ${{ runner.temp }}/ig_token
+        run: python scripts/update_stats.py
+
+      # Long-lived Instagram tokens expire after 60 days. If you added a GH_PAT secret,
+      # the refreshed token is saved back so it never expires.
+      - name: Save refreshed token
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          TOKEN_FILE: ${{ runner.temp }}/ig_token
+        run: |
+          if [ -n "$GH_TOKEN" ] && [ -s "$TOKEN_FILE" ]; then
+            echo "::add-mask::$(cat "$TOKEN_FILE")"
+            gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" < "$TOKEN_FILE"
+            echo "Saved refreshed token."
+          else
+            echo "No GH_PAT secret, skipping token save (refresh the token manually every ~50 days)."
+          fi
+          rm -f "$TOKEN_FILE"
+
+      - name: Commit updated stats
+        run: |
+          if git diff --quiet -- data/stats.json && git ls-files --error-unmatch data/stats.json >/dev/null 2>&1; then
+            echo "No change in stats."
+            exit 0
+          fi
+          git config user.name "stats-bot"
+          git config user.email "stats-bot@users.noreply.github.com"
+          git add data/stats.json
+          git commit -m "Update Instagram stats"
+          git push
