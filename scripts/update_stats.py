@@ -28,6 +28,10 @@ OUT_FILE = Path(__file__).resolve().parent.parent / "data" / "stats.json"
 MIN_REEL_AGE = timedelta(days=2)  # brand-new reels are still collecting views, so skip them
 
 
+class ApiError(Exception):
+    pass
+
+
 def get(url: str, **params) -> dict:
     query = urllib.parse.urlencode(params)
     try:
@@ -35,8 +39,9 @@ def get(url: str, **params) -> dict:
             return json.load(resp)
     except urllib.error.HTTPError as err:
         body = err.read().decode("utf-8", "replace")
-        # Never print the token: strip it from any echoed URL.
-        raise SystemExit(f"Instagram API error {err.code}: {body[:500]}") from None
+        # Never print the token: only the endpoint path and Meta's error text.
+        path = url.split("/v21.0/")[-1] if "/v21.0/" in url else url.rsplit("/", 1)[-1]
+        raise ApiError(f"{path}: HTTP {err.code}: {body[:400]}") from None
 
 
 def reel_views(api: str, media_id: str, token: str) -> int | None:
@@ -60,22 +65,32 @@ def main() -> None:
     api = IG_API if is_ig_token else FB_API
     who = "me" if is_ig_token else IG_USER_ID
 
-    profile = get(f"{api}/{who}", fields="username,followers_count,media_count", access_token=token)
+    print(f"Using {'Instagram' if is_ig_token else 'Facebook'} Graph API")
+    try:
+        profile = get(f"{api}/{who}", fields="username,followers_count,media_count", access_token=token)
+    except ApiError as err:
+        raise SystemExit(f"Could not read profile numbers -> {err}") from None
 
-    media = get(f"{api}/{who}/media", fields="id,media_product_type,timestamp", limit=50, access_token=token)
+    # Reel views need the insights permission. If that part is refused, still save
+    # followers/posts and leave average views out (the page then keeps its own number).
     now = datetime.now(timezone.utc)
     views = []
-    for item in media.get("data", []):
-        if item.get("media_product_type") != "REELS":
-            continue
-        posted = datetime.fromisoformat(item["timestamp"].replace("+0000", "+00:00"))
-        if now - posted < MIN_REEL_AGE:
-            continue
-        v = reel_views(api, item["id"], token)
-        if v is not None:
-            views.append(v)
-        if len(views) >= sample:
-            break
+    try:
+        media = get(f"{api}/{who}/media", fields="id,media_product_type,timestamp", limit=50, access_token=token)
+        for item in media.get("data", []):
+            if item.get("media_product_type") != "REELS":
+                continue
+            posted = datetime.fromisoformat(item["timestamp"].replace("+0000", "+00:00"))
+            if now - posted < MIN_REEL_AGE:
+                continue
+            v = reel_views(api, item["id"], token)
+            if v is not None:
+                views.append(v)
+            if len(views) >= sample:
+                break
+    except ApiError as err:
+        print(f"WARNING: could not read reel views, skipping average views -> {err}", file=sys.stderr)
+        views = []
 
     stats = {
         "username": profile.get("username"),
@@ -94,8 +109,12 @@ def main() -> None:
 
     token_out = os.environ.get("IG_TOKEN_OUT")
     if token_out and is_ig_token:  # system-user (EAA) tokens never expire, nothing to refresh
-        refreshed = get("https://graph.instagram.com/refresh_access_token",
-                        grant_type="ig_refresh_token", access_token=token)
+        try:
+            refreshed = get("https://graph.instagram.com/refresh_access_token",
+                            grant_type="ig_refresh_token", access_token=token)
+        except ApiError as err:
+            print(f"Token refresh failed, keeping the old one -> {err}", file=sys.stderr)
+            refreshed = {}
         new_token = refreshed.get("access_token")
         if new_token:
             Path(token_out).write_text(new_token, encoding="utf-8")
