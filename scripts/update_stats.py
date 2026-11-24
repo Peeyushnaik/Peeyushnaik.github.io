@@ -21,7 +21,9 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-API = "https://graph.instagram.com/v21.0"
+IG_API = "https://graph.instagram.com/v21.0"   # Instagram-login tokens (start with "IG")
+FB_API = "https://graph.facebook.com/v21.0"    # Facebook/system-user tokens (start with "EAA")
+IG_USER_ID = os.environ.get("IG_USER_ID", "17841472846080250")  # @peeyush.chronicles, not secret
 OUT_FILE = Path(__file__).resolve().parent.parent / "data" / "stats.json"
 MIN_REEL_AGE = timedelta(days=2)  # brand-new reels are still collecting views, so skip them
 
@@ -37,8 +39,8 @@ def get(url: str, **params) -> dict:
         raise SystemExit(f"Instagram API error {err.code}: {body[:500]}") from None
 
 
-def reel_views(media_id: str, token: str) -> int | None:
-    data = get(f"{API}/{media_id}/insights", metric="views", access_token=token).get("data", [])
+def reel_views(api: str, media_id: str, token: str) -> int | None:
+    data = get(f"{api}/{media_id}/insights", metric="views", access_token=token).get("data", [])
     if not data:
         return None
     item = data[0]
@@ -54,9 +56,13 @@ def main() -> None:
         raise SystemExit("IG_ACCESS_TOKEN is not set.")
     sample = int(os.environ.get("REEL_SAMPLE", "12"))
 
-    profile = get(f"{API}/me", fields="username,followers_count,media_count", access_token=token)
+    is_ig_token = token.startswith("IG")
+    api = IG_API if is_ig_token else FB_API
+    who = "me" if is_ig_token else IG_USER_ID
 
-    media = get(f"{API}/me/media", fields="id,media_product_type,timestamp", limit=50, access_token=token)
+    profile = get(f"{api}/{who}", fields="username,followers_count,media_count", access_token=token)
+
+    media = get(f"{api}/{who}/media", fields="id,media_product_type,timestamp", limit=50, access_token=token)
     now = datetime.now(timezone.utc)
     views = []
     for item in media.get("data", []):
@@ -65,7 +71,7 @@ def main() -> None:
         posted = datetime.fromisoformat(item["timestamp"].replace("+0000", "+00:00"))
         if now - posted < MIN_REEL_AGE:
             continue
-        v = reel_views(item["id"], token)
+        v = reel_views(api, item["id"], token)
         if v is not None:
             views.append(v)
         if len(views) >= sample:
@@ -87,7 +93,7 @@ def main() -> None:
           f"avg_views={stats['avg_views']} over {stats['reels_sampled']} reels")
 
     token_out = os.environ.get("IG_TOKEN_OUT")
-    if token_out:
+    if token_out and is_ig_token:  # system-user (EAA) tokens never expire, nothing to refresh
         refreshed = get("https://graph.instagram.com/refresh_access_token",
                         grant_type="ig_refresh_token", access_token=token)
         new_token = refreshed.get("access_token")
